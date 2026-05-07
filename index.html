@@ -257,21 +257,31 @@
             position: absolute;
             inset: 0;
             display: flex;
-            width: 100%;
             height: 100%;
             transition: transform 0.8s ease-in-out;
             will-change: transform;
             left: 0;
             top: 0;
+            z-index: 1;
+            transform: translateX(0);
         }
 
         .hero-slide {
             flex: 0 0 100%;
+            max-width: 100%;
             width: 100%;
             height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #F7F5F2;
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
         }
 
         .hero::before {
@@ -283,6 +293,7 @@
             bottom: 0;
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="0.5" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
             pointer-events: none;
+            z-index: 0;
         }
 
         .hero-content {
@@ -381,7 +392,7 @@
 
         .product-image {
             height: 320px;
-            background-size: contain;
+            background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             position: relative;
@@ -591,10 +602,6 @@
                 margin-top: 70px;
             }
 
-            .hero-slider {
-                overflow: hidden;
-            }
-
             .detail-container {
                 grid-template-columns: 1fr;
                 gap: 3rem;
@@ -733,7 +740,7 @@
         <h2 class="section-title">Mother's Day Special</h2>
         <div class="products-grid" id="mothersGrid">
             <div class="product-card" data-product="30">
-                <div class="product-image" style="background-image: url('md11.jpg')"></div>
+                <div class="product-image" style="background-image: url('images/md11.jpg')"></div>
                 <div class="product-info">
                     <h3 class="product-title">Mothers Day Special Deal</h3>
                     <div class="product-price">Rs 2999</div>
@@ -741,7 +748,7 @@
                 </div>
             </div>
             <div class="product-card" data-product="31">
-                <div class="product-image" style="background-image: url('md3.jpg')"></div>
+                <div class="product-image" style="background-image: url('images/mdm1.jpg')"></div>
                 <div class="product-info">
                     <h3 class="product-title">Mothers Day Mug</h3>
                     <div class="product-price">Rs 699</div>
@@ -749,7 +756,7 @@
                 </div>
             </div>
             <div class="product-card" data-product="32">
-                <div class="product-image" style="background-image: url('md5.jpg')"></div>
+                <div class="product-image" style="background-image: url('images/mdc.jpg')"></div>
                 <div class="product-info">
                     <h3 class="product-title">Mothers Day Cushion</h3>
                     <div class="product-price">Rs 999</div>
@@ -757,7 +764,7 @@
                 </div>
             </div>
             <div class="product-card" data-product="33">
-                <div class="product-image" style="background-image: url('md1.jpg')"></div>
+                <div class="product-image" style="background-image: url('images/mdf1.jpg')"></div>
                 <div class="product-info">
                     <h3 class="product-title">Mothers Day Frames</h3>
                     <div class="product-price">Rs 1399</div>
@@ -1247,30 +1254,30 @@
                 desc: 'Gallery-style canvas with deep color saturation.'
             },
             {
-                images: ['md11.jpg', 'md22.jpg'],
+                images: ['images/md11.jpg', 'images/md22.jpg'],
                 title: 'Mothers Day Special Deal',
-                price: 'Rs 2999',
-                originalPrice: 'Rs 4499',
+                price: 'Rs 1999',
+                originalPrice: 'Rs 2999',
                 desc: 'Exclusive Mother\'s Day combo: Premium Mug + Beautiful Frame + Soft Cushion with special discount.'
             },
             {
-                images: ['md3.jpg', 'md4.jpg'],
+                images: ['images/mdm1.jpg', 'images/mdm2.jpg'],
                 title: 'Mothers Day Mug',
                 price: 'Rs 699',
-                originalPrice: 'Rs 999',
+                originalPrice: 'Rs 799',
                 desc: 'Beautiful Mother\'s Day special mug with premium photo print - perfect gift for mom.'
             },
             {
-                images: ['md5.jpg', 'md6.jpg'],
+                images: ['images/mdc.jpg', 'images/mdc2.jpg'],
                 title: 'Mothers Day Cushion',
                 price: 'Rs 999',
                 originalPrice: 'Rs 1499',
                 desc: 'Soft and comfortable Mother\'s Day cushion with custom photo design.'
             },
             {
-                images: ['md1.jpg', 'md2.jpg'],
+                images: ['images/mdf.jpg', 'images/mdf1.jpg'],
                 title: 'Mothers Day Frames',
-                price: 'Rs 1399',
+                price: 'Rs 999',
                 originalPrice: 'Rs 1999',
                 desc: 'Elegant Mother\'s Day frame with premium finish - ideal for precious memories.'
             }
@@ -1281,7 +1288,7 @@
 
         function openProductPage(index) {
             localStorage.setItem('selectedProduct', index);
-            window.location.href = 'product.html';
+            window.location.href = `product.html?product=${index}`;
         }
 
         // Product Card Click Handler
@@ -1330,6 +1337,7 @@
             updateDetailImage();
             
             document.getElementById('productsGrid').style.display = 'none';
+            document.getElementById('mothersGrid').style.display = 'none';
             document.getElementById('productDetail').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
@@ -1337,12 +1345,18 @@
         function hideProductDetail() {
             document.getElementById('productDetail').style.display = 'none';
             document.getElementById('productsGrid').style.display = 'grid';
+            document.getElementById('mothersGrid').style.display = 'grid';
             document.body.style.overflow = 'auto';
         }
 
         function updateDetailImage() {
             const product = products[currentProductIndex];
-            document.getElementById('detailImage').src = product.images[currentImageIndex];
+            const imageSrc = (product && product.images && product.images[currentImageIndex])
+                ? product.images[currentImageIndex]
+                : (product && product.images && product.images[0])
+                    ? product.images[0]
+                    : 'images/whitemug1.jpg';
+            document.getElementById('detailImage').src = imageSrc;
         }
 
         // Smooth scrolling for nav links
@@ -1938,18 +1952,28 @@ function setupHeroSlides() {
     heroImages.forEach(image => {
         const slide = document.createElement('div');
         slide.className = 'hero-slide';
-        slide.style.backgroundImage = `url('${image}')`;
+        const img = document.createElement('img');
+        img.src = image;
+        img.alt = 'Hero image';
+        slide.appendChild(img);
         heroSlider.appendChild(slide);
     });
 
     const clonedSlide = document.createElement('div');
     clonedSlide.className = 'hero-slide';
-    clonedSlide.style.backgroundImage = `url('${heroImages[0]}')`;
+    const cloneImg = document.createElement('img');
+    cloneImg.src = heroImages[0];
+    cloneImg.alt = 'Hero image';
+    clonedSlide.appendChild(cloneImg);
     heroSlider.appendChild(clonedSlide);
 }
 
-function moveHeroSlider(index) {
-    heroSlider.style.transition = 'transform 0.8s ease-in-out';
+function moveHeroSlider(index, instant = false) {
+    if (instant) {
+        heroSlider.style.transition = 'none';
+    } else {
+        heroSlider.style.transition = 'transform 0.8s ease-in-out';
+    }
     heroSlider.style.transform = `translateX(-${index * 100}%)`;
 }
 
@@ -1967,7 +1991,7 @@ heroSlider.addEventListener('transitionend', () => {
 });
 
 setupHeroSlides();
-moveHeroSlider(heroImageIndex);
+moveHeroSlider(heroImageIndex, true);
 setInterval(rotateHeroImage, 3000);
 
 // Initialize cart when page loads
