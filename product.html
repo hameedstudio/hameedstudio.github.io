@@ -407,10 +407,22 @@
             { images:['images/visitingcard1.jpg','images/visitingcard2.jpg'], title:'Visiting Card', price:'Rs 399', originalPrice:'Rs 499', desc:'Custom visiting cards printed on matte stock.' },
             { images:['images/tempbottle1.jpg','images/tempbottle2.jpg'], title:'Temp Bottle', price:'Rs 999', originalPrice:'Rs 1199', desc:'Temperature-control bottle with premium finish.' },
             { images:['images/magiccushion1.jpg','images/cushion2.jpg'], title:'Magic Cushion', price:'Rs 1299', originalPrice:'Rs 1499', desc:'Unique magic cushion with color-changing print.' },
-            { images:['images/canvas1.jpg','images/canvas2.jpg'], title:'Photo Canvas', price:'Rs 2999', originalPrice:'Rs 3499', desc:'Gallery-style canvas with deep color saturation.' }
+            { images:['images/canvas1.jpg','images/canvas2.jpg'], title:'Photo Canvas', price:'Rs 2999', originalPrice:'Rs 3499', desc:'Gallery-style canvas with deep color saturation.' },
+            { images:['images/md11.jpg','images/md22.jpg'], title:'Mothers Day Special Deal', price:'Rs 1999', originalPrice:'Rs 2999', desc:"Exclusive Mother's Day combo: Premium Mug + Beautiful Frame + Soft Cushion with special discount." },
+            { images:['images/mdm1.jpg','images/mdm2.jpg'], title:'Mothers Day Mug', price:'Rs 699', originalPrice:'Rs 999', desc:"Beautiful Mother's Day special mug with premium photo print - perfect gift for mom." },
+            { images:['images/mdc1.jpg','images/mdc.jpg'], title:'Mothers Day Cushion', price:'Rs 999', originalPrice:'Rs 1499', desc:"Soft and comfortable Mother's Day cushion with custom photo design." },
+            { images:['images/mdf1.jpg','images/mdf.jpg'], title:'Mothers Day Frames', price:'Rs 999', originalPrice:'Rs 1999', desc:"Elegant Mother's Day frame with premium finish - ideal for precious memories." }
         ];
 
         function getSelectedProductIndex() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productParam = urlParams.get('product');
+            if (productParam !== null) {
+                const productIndex = parseInt(productParam, 10);
+                if (Number.isInteger(productIndex) && productIndex >= 0 && productIndex < products.length) {
+                    return productIndex;
+                }
+            }
             const stored = localStorage.getItem('selectedProduct');
             const index = parseInt(stored, 10);
             return Number.isInteger(index) && index >= 0 && index < products.length ? index : null;
@@ -426,6 +438,7 @@
                 cart.push({ id: productIndex, title: product.title, price: product.price, quantity: 1 });
             }
             localStorage.setItem('cartItems', JSON.stringify(cart));
+            updateCartCount();
             alert(`${product.title} added to cart!`);
         }
 
@@ -440,6 +453,7 @@
         }
 
         function renderProduct(productIndex) {
+            currentImageIndex = 0;
             const product = products[productIndex];
             const productContent = document.getElementById('productContent');
             productContent.innerHTML = `
@@ -471,8 +485,16 @@
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             const count = cart.reduce((total, item) => total + item.quantity, 0);
-            document.getElementById('cartCount').textContent = count;
-            document.getElementById('cartCount').style.display = count > 0 ? 'flex' : 'none';
+            const cartCount = document.getElementById('cartCount');
+            const overlayCount = document.getElementById('overlayCartCount');
+            if (cartCount) {
+                cartCount.textContent = count;
+                cartCount.style.display = count > 0 ? 'flex' : 'none';
+            }
+            if (overlayCount) {
+                overlayCount.textContent = count;
+                overlayCount.style.display = count > 0 ? 'inline-flex' : 'none';
+            }
         }
 
         const selectedIndex = getSelectedProductIndex();
