@@ -930,70 +930,70 @@
             {
                 images: ['images/mirrorframes1.jpg', 'images/mirrorframes2.jpg'],
                 title: 'Mirror Frames',
-                price: 'Rs 2000',
+                price: 'Rs 1599',
                 originalPrice: 'Rs 2500',
                 desc: 'Premium mirror frames with polished edges and luxury finish.'
             },
             {
                 images: ['images/magicmirror1.jpg', 'images/magicmirror2.jpg'],
                 title: 'LED Frame',
-                price: 'Rs 2000',
+                price: 'Rs 1999',
                 originalPrice: 'Rs 2400',
                 desc: 'Modern LED photo frame with soft ambient lighting.'
             },
             {
                 images: ['images/ledframe1.jpg', 'images/ledframe2.jpg'],
                 title: 'Couple Frame',
-                price: 'Rs 2499',
+                price: 'Rs 1799',
                 originalPrice: 'Rs 2999',
                 desc: 'Elegant couple frame with premium glass and gold trim.'
             },
             {
                 images: ['images/magicmirrornew1.jpg', 'images/magicmirrorframenew2.jpg'],
                 title: 'Magic Mirror Frame',
-                price: 'Rs 2000',
+                price: 'Rs 1499',
                 originalPrice: 'Rs 2500',
                 desc: 'Luxury magic mirror frame with glowing edge lighting.'
             },
             {
                 images: ['images/whitemug1.jpg', 'images/whitemug2.jpg'],
                 title: 'White Mug',
-                price: 'Rs 799',
+                price: 'Rs 599',
                 originalPrice: 'Rs 999',
                 desc: 'Classic white mug with full-color photo print.'
             },
             {
                 images: ['images/colourmug1.jpg', 'images/colourmug2.jpg'],
                 title: 'Colour Mug',
-                price: 'Rs 1099',
+                price: 'Rs 999',
                 originalPrice: 'Rs 1299',
                 desc: 'Colour-changing mug with premium photo design.'
             },
             {
                 images: ['images/whiteshirt1.jpg', 'images/whiteshirt2.jpg'],
                 title: 'White Shirt',
-                price: 'Rs 799',
+                price: 'Rs 699',
                 originalPrice: 'Rs 999',
                 desc: 'Customized white shirt with crisp print quality.'
             },
             {
                 images: ['images/colourshirt1.jpg', 'images/colourshirt2.jpg'],
                 title: 'Colour Shirt',
-                price: 'Rs 1499',
+                price: 'Rs 999',
                 originalPrice: 'Rs 1799',
                 desc: 'Premium colour shirt with unique photo artwork.'
             },
             {
                 images: ['images/cushion1.jpg', 'images/cushion2.jpg'],
                 title: 'Cushion',
-                price: 'Rs 749',
+                price: 'Rs 999',
                 originalPrice: 'Rs 899',
                 desc: 'Soft cushion with high-definition printed fabric.'
             },
             {
                 images: ['images/chain1.jpg', 'images/chain2.jpg'],
                 title: 'Chain',
-                price: 'Rs 499',
+                price: 'Rs 799',
                 originalPrice: 'Rs 599',
                 desc: 'Stylish chain with polished metal finish.'
             },
@@ -1042,7 +1042,7 @@
             {
                 images: ['images/pen1.jpg', 'images/pen2.jpg'],
                 title: 'Pens',
-                price: 'Rs 99',
+                price: 'Rs 399',
                 originalPrice: 'Rs 149',
                 desc: 'Premium writing pens with personalized branding.'
             },
@@ -1084,14 +1084,14 @@
             {
                 images: ['images/phonecover1.jpg', 'images/phonecover2.jpg'],
                 title: 'Phone Cover',
-                price: 'Rs 899',
+                price: 'Rs 699',
                 originalPrice: 'Rs 1099',
                 desc: 'Protective phone cover with custom photo print.'
             },
             {
                 images: ['images/printedalbum1.jpg', 'images/printedalbum2.jpg'],
                 title: 'Printed Album',
-                price: 'Rs 1299',
+                price: 'Rs 14999',
                 originalPrice: 'Rs 1499',
                 desc: 'High-end printed album with premium binding.'
             },
@@ -1105,14 +1105,14 @@
             {
                 images: ['images/wallet1.jpg', 'images/wallet2.jpg'],
                 title: 'Wallet',
-                price: 'Rs 799',
+                price: 'Rs 999',
                 originalPrice: 'Rs 999',
                 desc: 'Stylish wallet with premium leather look.'
             },
             {
                 images: ['images/visitingcard1.jpg', 'images/visitingcard2.jpg'],
-                title: 'Visiting Card',
-                price: 'Rs 399',
+                title: 'Visiting Card (x1000)',
+                price: 'Rs 4999',
                 originalPrice: 'Rs 499',
                 desc: 'Custom visiting cards printed on matte stock.'
             },
@@ -1800,7 +1800,7 @@ class ShoppingCart {
 document.addEventListener('DOMContentLoaded', () => {
     window.shoppingCart = new ShoppingCart();
 
-    const saleLabels = ['30% OFF', '50% OFF', 'Price Cut'];
+    const saleLabels = ['30% OFF', '50% OFF'];
     document.querySelectorAll('.product-card').forEach((card, index) => {
         const badge = document.createElement('div');
         badge.className = 'sale-badge';
