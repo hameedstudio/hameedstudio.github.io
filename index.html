@@ -257,6 +257,7 @@
             position: absolute;
             inset: 0;
             display: flex;
+            width: 100%;
             height: 100%;
             transition: transform 0.8s ease-in-out;
             will-change: transform;
@@ -278,11 +279,10 @@
         }
 
         .hero-slide img {
-            width: 100%;
-            height: 100%;
+            max-width: 95%;
+            max-height: 95%;
             object-fit: contain;
             display: block;
-            padding: 10px;
         }
 
         .hero::before {
@@ -744,7 +744,7 @@
                 <div class="product-image" style="background-image: url('images/md11.jpg')"></div>
                 <div class="product-info">
                     <h3 class="product-title">Mothers Day Special Deal</h3>
-                    <div class="product-price">Rs 2999</div>
+                    <div class="product-price">Rs 1999</div>
                     <button class="tile-buy-btn">Add to Cart</button>
                 </div>
             </div>
@@ -768,7 +768,7 @@
                 <div class="product-image" style="background-image: url('images/mdf1.jpg')"></div>
                 <div class="product-info">
                     <h3 class="product-title">Mothers Day Frames</h3>
-                    <div class="product-price">Rs 1399</div>
+                    <div class="product-price">Rs 999</div>
                     <button class="tile-buy-btn">Add to Cart</button>
                 </div>
             </div>
@@ -2005,13 +2005,6 @@ document.addEventListener('DOMContentLoaded', () => {
         badge.className = 'sale-badge';
         badge.textContent = saleLabels[Math.floor(Math.random() * saleLabels.length)];
         card.prepend(badge);
-
-        // Add original price display
-        const product = products[index];
-        const priceDiv = card.querySelector('.product-price');
-        if (product && product.originalPrice) {
-            priceDiv.innerHTML = `${product.price} <span class="original-price">was ${product.originalPrice}</span>`;
-        }
     });
 });
 
