@@ -318,6 +318,14 @@
             background: #F7F5F2;
         }
 
+        /* Mother's Day Section */
+        .mothers-day-section {
+            padding: 50px 5% 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #FFF5F7 0%, #F7F5F2 100%);
+        }
+
         .section-title {
             text-align: center;
             font-size: 3.5rem;
@@ -642,6 +650,10 @@
                 padding: 40px 1% 60px;
             }
 
+            .mothers-day-section {
+                padding: 40px 1% 60px;
+            }
+
             .products-grid {
                 padding: 0 1%;
                 gap: 0.75rem;
@@ -713,6 +725,45 @@
         <div class="hero-slider" id="heroSlider"></div>
         <div class="hero-content">
             
+        </div>
+    </section>
+
+    <!-- Mother's Day Deals Section -->
+    <section class="mothers-day-section">
+        <h2 class="section-title">Mother's Day Special</h2>
+        <div class="products-grid" id="mothersGrid">
+            <div class="product-card" data-product="30">
+                <div class="product-image" style="background-image: url('md11.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Mothers Day Special Deal</h3>
+                    <div class="product-price">Rs 2999</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="31">
+                <div class="product-image" style="background-image: url('md3.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Mothers Day Mug</h3>
+                    <div class="product-price">Rs 699</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="32">
+                <div class="product-image" style="background-image: url('md5.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Mothers Day Cushion</h3>
+                    <div class="product-price">Rs 999</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="33">
+                <div class="product-image" style="background-image: url('md1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Mothers Day Frames</h3>
+                    <div class="product-price">Rs 1399</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1194,6 +1245,34 @@
                 price: 'Rs 2999',
                 originalPrice: 'Rs 3499',
                 desc: 'Gallery-style canvas with deep color saturation.'
+            },
+            {
+                images: ['md11.jpg', 'md22.jpg'],
+                title: 'Mothers Day Special Deal',
+                price: 'Rs 2999',
+                originalPrice: 'Rs 4499',
+                desc: 'Exclusive Mother\'s Day combo: Premium Mug + Beautiful Frame + Soft Cushion with special discount.'
+            },
+            {
+                images: ['md3.jpg', 'md4.jpg'],
+                title: 'Mothers Day Mug',
+                price: 'Rs 699',
+                originalPrice: 'Rs 999',
+                desc: 'Beautiful Mother\'s Day special mug with premium photo print - perfect gift for mom.'
+            },
+            {
+                images: ['md5.jpg', 'md6.jpg'],
+                title: 'Mothers Day Cushion',
+                price: 'Rs 999',
+                originalPrice: 'Rs 1499',
+                desc: 'Soft and comfortable Mother\'s Day cushion with custom photo design.'
+            },
+            {
+                images: ['md1.jpg', 'md2.jpg'],
+                title: 'Mothers Day Frames',
+                price: 'Rs 1399',
+                originalPrice: 'Rs 1999',
+                desc: 'Elegant Mother\'s Day frame with premium finish - ideal for precious memories.'
             }
         ];
 
@@ -1206,10 +1285,24 @@
         }
 
         // Product Card Click Handler
-        document.querySelectorAll('.product-card').forEach((card, index) => {
+        document.querySelectorAll('.product-card').forEach((card) => {
             card.addEventListener('click', () => {
-                openProductPage(index);
+                const productIndex = parseInt(card.getAttribute('data-product'));
+                openProductPage(productIndex);
             });
+
+            const tileBuyBtn = card.querySelector('.tile-buy-btn');
+            if (tileBuyBtn) {
+                tileBuyBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const productIndex = parseInt(card.getAttribute('data-product'));
+                    if (window.shoppingCart) {
+                        window.shoppingCart.addToCart(productIndex);
+                    } else {
+                        alert('Cart is initializing, please try again in a moment.');
+                    }
+                });
+            }
         });
 
         // Navigation Arrows
