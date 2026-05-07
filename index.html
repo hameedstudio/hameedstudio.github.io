@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hameed Photo Studio Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #EDE7DF 0%, #D8D2C8 100%);
+            color: #333;
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(45deg, #8B7355, #A0826D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #ffd700;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cart-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,107,107,0.3);
+        }
+
+        .cart-count {
+            background: white;
+            color: #ff6b6b;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 10010;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-content {
+            width: min(320px, 90vw);
+            background: #EDE7DF;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.35);
+        }
+
+        .contact-popup {
+            display: none;
+            background: #EDE7DF;
+            color: #333;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .contact-popup.visible {
+            display: block;
+        }
+
+        .contact-popup p {
+            margin: 0.5rem 0;
+        }
+
+        .menu-close {
+            background: transparent;
+            border: none;
+            color: #333;
+            font-size: 2.5rem;
+            line-height: 1;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .menu-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .menu-nav a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 0.9rem 1rem;
+            border-radius: 16px;
+            transition: background 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-nav a:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .menu-cart-count {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-left: 0.75rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: url('bg1.jpg') center center / contain no-repeat;
+            background-color: #F7F5F2;
+            color: #333;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5%;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="0.5" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+            background: linear-gradient(45deg, #ffd700, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Products Grid */
+        .products-section {
+            padding: 120px 5% 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #F7F5F2;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 4rem;
+            color: #333;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            align-items: stretch;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            min-height: 520px;
+            background: #EDE7DF;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+            border: 1px solid #000;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+        }
+
+        .sale-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #d4624f, #f97316);
+            color: white;
+            padding: 0.45rem 0.9rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            z-index: 3;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .product-image {
+            height: 320px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .product-card:hover .product-image::after {
+            left: 100%;
+        }
+
+        .product-info {
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 0.7rem;
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: #1a1a2e;
+            line-height: 1.2;
+        }
+
+        .product-price {
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: #8B7355;
+            margin-bottom: 0.45rem;
+            line-height: 1.2;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #000;
+            font-size: 0.95rem;
+            margin-left: 0.75rem;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        /* Product Detail Page */
+        .product-detail {
+            display: none;
+            min-height: 100vh;
+            padding: 150px 5% 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .image-gallery {
+            position: relative;
+            height: 500px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .nav-arrows {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .nav-arrows:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-arrow {
+            left: 20px;
+        }
+
+        .next-arrow {
+            right: 20px;
+        }
+
+        .detail-info h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #1a1a2e;
+        }
+
+        .detail-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ff6b6b;
+            margin-bottom: 2rem;
+        }
+
+        .detail-original {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.5rem;
+            margin-left: 1rem;
+        }
+
+        .buy-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255,107,107,0.5);
+        }
+
+        .tile-buy-btn {
+            display: inline-block;
+            margin-top: 0.8rem;
+            background: linear-gradient(135deg, #D8D2C8, #EDE7DF);
+            color: #333;
+            border: 1px solid #333;
+            padding: 0.85rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .tile-buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #EDE7DF, #F7F5F2);
+        }
+
+        .back-btn {
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #16213e;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                background: url('bg2.jpg') center center / contain no-repeat;
+                background-color: #F7F5F2;
+            }
+
+            .detail-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .product-card {
+                min-height: auto;
+            }
+
+            .product-image {
+                height: 240px;
+            }
+
+            .product-info {
+                padding: 1.2rem;
+                gap: 0.5rem;
+            }
+
+            .product-title {
+                margin-bottom: 0.15rem;
+            }
+
+            .product-price {
+                margin-bottom: 0.2rem;
+            }
+
+            .original-price {
+                margin-left: 0.5rem;
+            }
+
+            .tile-buy-btn {
+                margin-top: 0.4rem;
+                padding: 0.75rem 1.2rem;
+            }
+        }
+
+        /* Hameed Photo Studio Footer Styles */
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card, .hero-content {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">Hameed Photo Studio</div>
+            <div style="display: flex; align-items: center;">
+                
+                <div class="hamburger" onclick="toggleMenu()">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <button class="menu-close" onclick="toggleMenu(false)">×</button>
+            <nav class="menu-nav">
+                <a href="#" onclick="handleMenuLink('home', event)">Home</a>
+                <a href="#" onclick="handleMenuLink('products', event)">Products</a>
+                <a href="cart.html" class="menu-cart-link" onclick="toggleMenu(false)">Cart <span class="menu-cart-count" id="overlayCartCount">0</span></a>
+                <a href="#" onclick="handleContactMenu(event)">Contact</a>
+                <a href="#" onclick="handleMenuLink('about', event)">About</a>
+            </nav>
+            <div class="contact-popup" id="menuContactPopup">
+                <p><strong>Contact</strong></p>
+                <p>mmmm@gmail.com</p>
+                <p>03338181082</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <h2 class="section-title">Featured Collection</h2>
+        
+        <!-- SCRIPT SECTION - ADD YOUR PRODUCTS HERE -->
+        <div class="products-grid" id="productsGrid">
+            <div class="product-card" data-product="0">
+                <div class="product-image" style="background-image: url('images/mirrorframes1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Mirror Frames</h3>
+                    <div class="product-price">Rs 2000</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="1">
+                <div class="product-image" style="background-image: url('images/magicmirror1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">LED Frame</h3>
+                    <div class="product-price">Rs 2000</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="2">
+                <div class="product-image" style="background-image: url('images/ledframe1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Couple Frame</h3>
+                    <div class="product-price">Rs 2499</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="3">
+                <div class="product-image" style="background-image: url('images/magicmirrornew1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Magic Mirror Frame</h3>
+                    <div class="product-price">Rs 2000</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="4">
+                <div class="product-image" style="background-image: url('images/whitemug1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">White Mug</h3>
+                    <div class="product-price">Rs 799</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="5">
+                <div class="product-image" style="background-image: url('images/colourmug1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Colour Mug</h3>
+                    <div class="product-price">Rs 1099</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="6">
+                <div class="product-image" style="background-image: url('images/whiteshirt1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">White Shirt</h3>
+                    <div class="product-price">Rs 799</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="7">
+                <div class="product-image" style="background-image: url('images/colourshirt1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Colour Shirt</h3>
+                    <div class="product-price">Rs 1499</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="8">
+                <div class="product-image" style="background-image: url('images/cushion1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Cushion</h3>
+                    <div class="product-price">Rs 749</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="9">
+                <div class="product-image" style="background-image: url('images/chain1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Chain</h3>
+                    <div class="product-price">Rs 499</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="10">
+                <div class="product-image" style="background-image: url('images/ring1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Ring</h3>
+                    <div class="product-price">Rs 245</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="11">
+                <div class="product-image" style="background-image: url('images/keyring1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Keyring</h3>
+                    <div class="product-price">Rs 499</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="12">
+                <div class="product-image" style="background-image: url('images/album1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Album</h3>
+                    <div class="product-price">Rs 999</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="13">
+                <div class="product-image" style="background-image: url('images/lunchbox1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Lunch Box</h3>
+                    <div class="product-price">Rs 699</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="14">
+                <div class="product-image" style="background-image: url('images/waterbottle1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Water Bottle</h3>
+                    <div class="product-price">Rs 899</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="15">
+                <div class="product-image" style="background-image: url('images/badge1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Badges</h3>
+                    <div class="product-price">Rs 199</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="16">
+                <div class="product-image" style="background-image: url('images/pen1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Pens</h3>
+                    <div class="product-price">Rs 99</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="17">
+                <div class="product-image" style="background-image: url('images/flyer1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Flyers</h3>
+                    <div class="product-price">Rs 699</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="18">
+                <div class="product-image" style="background-image: url('images/framedcanvas1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Framed Canvas</h3>
+                    <div class="product-price">Rs 3499</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="19">
+                <div class="product-image" style="background-image: url('images/birthdaycard1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Birthday Card</h3>
+                    <div class="product-price">Rs 499</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="20">
+                <div class="product-image" style="background-image: url('images/heartmug1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Heart Mug</h3>
+                    <div class="product-price">Rs 999</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="21">
+                <div class="product-image" style="background-image: url('images/magicmug1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Magic Mug</h3>
+                    <div class="product-price">Rs 1099</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="22">
+                <div class="product-image" style="background-image: url('images/phonecover1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Phone Cover</h3>
+                    <div class="product-price">Rs 899</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="23">
+                <div class="product-image" style="background-image: url('images/printedalbum1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Printed Album</h3>
+                    <div class="product-price">Rs 1299</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="24">
+                <div class="product-image" style="background-image: url('images/smallframe1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Small Frame</h3>
+                    <div class="product-price">Rs 599</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="25">
+                <div class="product-image" style="background-image: url('images/wallet1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Wallet</h3>
+                    <div class="product-price">Rs 799</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="26">
+                <div class="product-image" style="background-image: url('images/visitingcard1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Visiting Card</h3>
+                    <div class="product-price">Rs 399</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="27">
+                <div class="product-image" style="background-image: url('images/tempbottle1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Temp Bottle</h3>
+                    <div class="product-price">Rs 999</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="28">
+                <div class="product-image" style="background-image: url('images/magiccushion1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Magic Cushion</h3>
+                    <div class="product-price">Rs 1299</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-product="29">
+                <div class="product-image" style="background-image: url('images/canvas1.jpg')"></div>
+                <div class="product-info">
+                    <h3 class="product-title">Photo Canvas</h3>
+                    <div class="product-price">Rs 2999</div>
+                    <button class="tile-buy-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Detail Modal -->
+    <section class="product-detail" id="productDetail">
+        <div class="detail-container">
+            <div class="image-gallery">
+                <img src="frame1.jpg" alt="Product" class="main-image" id="detailImage">
+                <button class="nav-arrows prev-arrow" id="prevBtn">&#8249;</button>
+                <button class="nav-arrows next-arrow" id="nextBtn">&#8250;</button>
+            </div>
+            <div class="detail-info">
+                <h1 id="detailTitle">Product Title</h1>
+                <div class="detail-price" id="detailPrice">$299 <span class="detail-original">$429</span></div>
+                <p id="detailDesc">Premium quality product with exceptional craftsmanship. Limited edition available now.</p>
+                <button class="buy-btn">Add to Cart</button>
+                <button class="back-btn" id="backBtn">← Back to Collection</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Product Data Array - UPDATE THIS WITH YOUR PRODUCTS
+        const products = [
+            {
+                images: ['images/mirrorframes1.jpg', 'images/mirrorframes2.jpg'],
+                title: 'Mirror Frames',
+                price: 'Rs 2000',
+                originalPrice: 'Rs 2500',
+                desc: 'Premium mirror frames with polished edges and luxury finish.'
+            },
+            {
+                images: ['images/magicmirror1.jpg', 'images/magicmirror2.jpg'],
+                title: 'LED Frame',
+                price: 'Rs 2000',
+                originalPrice: 'Rs 2400',
+                desc: 'Modern LED photo frame with soft ambient lighting.'
+            },
+            {
+                images: ['images/ledframe1.jpg', 'images/ledframe2.jpg'],
+                title: 'Couple Frame',
+                price: 'Rs 2499',
+                originalPrice: 'Rs 2999',
+                desc: 'Elegant couple frame with premium glass and gold trim.'
+            },
+            {
+                images: ['images/magicmirrornew1.jpg', 'images/magicmirrorframenew2.jpg'],
+                title: 'Magic Mirror Frame',
+                price: 'Rs 2000',
+                originalPrice: 'Rs 2500',
+                desc: 'Luxury magic mirror frame with glowing edge lighting.'
+            },
+            {
+                images: ['images/whitemug1.jpg', 'images/whitemug2.jpg'],
+                title: 'White Mug',
+                price: 'Rs 799',
+                originalPrice: 'Rs 999',
+                desc: 'Classic white mug with full-color photo print.'
+            },
+            {
+                images: ['images/colourmug1.jpg', 'images/colourmug2.jpg'],
+                title: 'Colour Mug',
+                price: 'Rs 1099',
+                originalPrice: 'Rs 1299',
+                desc: 'Colour-changing mug with premium photo design.'
+            },
+            {
+                images: ['images/whiteshirt1.jpg', 'images/whiteshirt2.jpg'],
+                title: 'White Shirt',
+                price: 'Rs 799',
+                originalPrice: 'Rs 999',
+                desc: 'Customized white shirt with crisp print quality.'
+            },
+            {
+                images: ['images/colourshirt1.jpg', 'images/colourshirt2.jpg'],
+                title: 'Colour Shirt',
+                price: 'Rs 1499',
+                originalPrice: 'Rs 1799',
+                desc: 'Premium colour shirt with unique photo artwork.'
+            },
+            {
+                images: ['images/cushion1.jpg', 'images/cushion2.jpg'],
+                title: 'Cushion',
+                price: 'Rs 749',
+                originalPrice: 'Rs 899',
+                desc: 'Soft cushion with high-definition printed fabric.'
+            },
+            {
+                images: ['images/chain1.jpg', 'images/chain2.jpg'],
+                title: 'Chain',
+                price: 'Rs 499',
+                originalPrice: 'Rs 599',
+                desc: 'Stylish chain with polished metal finish.'
+            },
+            {
+                images: ['images/ring1.jpg', 'images/ring2.jpg'],
+                title: 'Ring',
+                price: 'Rs 245',
+                originalPrice: 'Rs 299',
+                desc: 'Elegant ring with personalized engraving option.'
+            },
+            {
+                images: ['images/keyring1.jpg', 'images/keyring2.jpg'],
+                title: 'Keyring',
+                price: 'Rs 499',
+                originalPrice: 'Rs 599',
+                desc: 'Durable keyring with premium photo insert.'
+            },
+            {
+                images: ['images/album1.jpg', 'images/album2.jpg'],
+                title: 'Album',
+                price: 'Rs 999',
+                originalPrice: 'Rs 1299',
+                desc: 'Luxury photo album with fine-quality pages.'
+            },
+            {
+                images: ['images/lunchbox1.jpg', 'images/lunchbox2.jpg'],
+                title: 'Lunch Box',
+                price: 'Rs 699',
+                originalPrice: 'Rs 849',
+                desc: 'Premium lunch box with easy-clean interior.'
+            },
+            {
+                images: ['images/waterbottle1.jpg', 'images/waterbottle2.jpg'],
+                title: 'Water Bottle',
+                price: 'Rs 899',
+                originalPrice: 'Rs 1099',
+                desc: 'Premium water bottle with custom print design.'
+            },
+            {
+                images: ['images/badge1.jpg', 'images/badge2.jpg'],
+                title: 'Badges',
+                price: 'Rs 199',
+                originalPrice: 'Rs 249',
+                desc: 'Set of custom badges with vibrant prints.'
+            },
+            {
+                images: ['images/pen1.jpg', 'images/pen2.jpg'],
+                title: 'Pens',
+                price: 'Rs 99',
+                originalPrice: 'Rs 149',
+                desc: 'Premium writing pens with personalized branding.'
+            },
+            {
+                images: ['images/flyer1.jpg', 'images/flyer2.jpg'],
+                title: 'Flyers',
+                price: 'Rs 699',
+                originalPrice: 'Rs 899',
+                desc: 'High-quality flyers printed on glossy stock.'
+            },
+            {
+                images: ['images/framedcanvas1.jpg', 'images/framedcanvas2.jpg'],
+                title: 'Framed Canvas',
+                price: 'Rs 3499',
+                originalPrice: 'Rs 3999',
+                desc: 'Large framed canvas with vibrant photo detail.'
+            },
+            {
+                images: ['images/birthdaycard1.jpg', 'images/birthdaycard2.jpg'],
+                title: 'Birthday Card',
+                price: 'Rs 499',
+                originalPrice: 'Rs 599',
+                desc: 'Premium birthday card with custom photo print.'
+            },
+            {
+                images: ['images/heartmug1.jpg', 'images/heartmug2.jpg'],
+                title: 'Heart Mug',
+                price: 'Rs 999',
+                originalPrice: 'Rs 1199',
+                desc: 'Romantic heart mug with vivid photo details.'
+            },
+            {
+                images: ['images/magicmug1.jpg', 'images/magicmug2.jpg'],
+                title: 'Magic Mug',
+                price: 'Rs 1099',
+                originalPrice: 'Rs 1299',
+                desc: 'Magic mug with hidden design revealed by heat.'
+            },
+            {
+                images: ['images/phonecover1.jpg', 'images/phonecover2.jpg'],
+                title: 'Phone Cover',
+                price: 'Rs 899',
+                originalPrice: 'Rs 1099',
+                desc: 'Protective phone cover with custom photo print.'
+            },
+            {
+                images: ['images/printedalbum1.jpg', 'images/printedalbum2.jpg'],
+                title: 'Printed Album',
+                price: 'Rs 1299',
+                originalPrice: 'Rs 1499',
+                desc: 'High-end printed album with premium binding.'
+            },
+            {
+                images: ['images/smallframe1.jpg', 'images/smallframe2.jpg'],
+                title: 'Small Frame',
+                price: 'Rs 599',
+                originalPrice: 'Rs 749',
+                desc: 'Compact frame with polished acrylic cover.'
+            },
+            {
+                images: ['images/wallet1.jpg', 'images/wallet2.jpg'],
+                title: 'Wallet',
+                price: 'Rs 799',
+                originalPrice: 'Rs 999',
+                desc: 'Stylish wallet with premium leather look.'
+            },
+            {
+                images: ['images/visitingcard1.jpg', 'images/visitingcard2.jpg'],
+                title: 'Visiting Card',
+                price: 'Rs 399',
+                originalPrice: 'Rs 499',
+                desc: 'Custom visiting cards printed on matte stock.'
+            },
+            {
+                images: ['images/tempbottle1.jpg', 'images/tempbottle2.jpg'],
+                title: 'Temp Bottle',
+                price: 'Rs 999',
+                originalPrice: 'Rs 1199',
+                desc: 'Temperature-control bottle with premium finish.'
+            },
+            {
+                images: ['images/magiccushion1.jpg', 'images/cushion2.jpg'],
+                title: 'Magic Cushion',
+                price: 'Rs 1299',
+                originalPrice: 'Rs 1499',
+                desc: 'Unique magic cushion with color-changing print.'
+            },
+            {
+                images: ['images/canvas1.jpg', 'images/canvas2.jpg'],
+                title: 'Photo Canvas',
+                price: 'Rs 2999',
+                originalPrice: 'Rs 3499',
+                desc: 'Gallery-style canvas with deep color saturation.'
+            }
+        ];
+
+        let currentProductIndex = 0;
+        let currentImageIndex = 0;
+
+        function openProductPage(index) {
+            localStorage.setItem('selectedProduct', index);
+            window.location.href = 'product.html';
+        }
+
+        // Product Card Click Handler
+        document.querySelectorAll('.product-card').forEach((card, index) => {
+            card.addEventListener('click', () => {
+                openProductPage(index);
+            });
+
+            const tileBuyBtn = card.querySelector('.tile-buy-btn');
+            if (tileBuyBtn) {
+                tileBuyBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (window.shoppingCart) {
+                        window.shoppingCart.addToCart(index);
+                    } else {
+                        alert('Cart is initializing, please try again in a moment.');
+                    }
+                });
+            }
+        });
+
+        // Navigation Arrows
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : products[currentProductIndex].images.length - 1;
+            updateDetailImage();
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            currentImageIndex = currentImageIndex < products[currentProductIndex].images.length - 1 ? currentImageIndex + 1 : 0;
+            updateDetailImage();
+        });
+
+        // Back Button
+        document.getElementById('backBtn').addEventListener('click', hideProductDetail);
+
+        function showProductDetail(index) {
+            currentProductIndex = index;
+            currentImageIndex = 0;
+            
+            const product = products[index];
+            document.getElementById('detailTitle').textContent = product.title;
+            document.getElementById('detailPrice').innerHTML = `${product.price} <span class="detail-original">${product.originalPrice}</span>`;
+            document.getElementById('detailDesc').textContent = product.desc;
+            updateDetailImage();
+            
+            document.getElementById('productsGrid').style.display = 'none';
+            document.getElementById('productDetail').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideProductDetail() {
+            document.getElementById('productDetail').style.display = 'none';
+            document.getElementById('productsGrid').style.display = 'grid';
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateDetailImage() {
+            const product = products[currentProductIndex];
+            document.getElementById('detailImage').src = product.images[currentImageIndex];
+        }
+
+        // Smooth scrolling for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Buy button functionality
+        document.querySelector('.buy-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (window.shoppingCart) {
+                window.shoppingCart.addToCart(currentProductIndex);
+            } else {
+                alert('Cart is initializing, please try again in a moment.');
+            }
+        });
+    </script>
+    <section id="contact" class="contact-section">
+        <div class="contact-content">
+            <h2>Contact Us</h2>
+            <p>Email: mmmm@gmail.com</p>
+            <p>Phone: 03338181082</p>
+        </div>
+    </section>
+    <!-- Hameed Photo Studio Footer -->
+    <footer class="footer" id="about">
+        <div class="footer-container">
+            <!-- Top Section -->
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo">Hameed Photo Studio</div>
+                    <p>Discover luxury crafted with precision and elegance. Join our exclusive collection.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/photohome92?igsh=MTJpOGVwdml5ODFxcg==" target="_blank" rel="noopener noreferrer" class="social-icon instagram" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="https://youtube.com/@hameedphotostudio9298?si=P5aayDx3hNtWAXXi" target="_blank" rel="noopener noreferrer" class="social-icon youtube" aria-label="YouTube">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </a>
+                        <a href="https://wa.me/923338181082" target="_blank" rel="noopener noreferrer" class="social-icon whatsapp" aria-label="WhatsApp">
+                            <svg viewBox="0 0 24 24" fill="#25D366" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/share/1ApuWfmQ8s/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-icon facebook" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#products">Products</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Press</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="footer-bottom">
+                <div class="footer-left">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span>Secure Payments</span>
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                            <span>Free Shipping</span>
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                <path d="M11.99 18.54l-.54 1.07.05.02C12.39 20.71 12.7 21 13 21h.53c.23 0 .46-.07.66-.21.24-.15.36-.38.36-.6 0-.43-.29-.81-.67-1.03l-.67-.32c-.32-.17-.52-.51-.52-.89s.2-.72.52-.89l.67-.32c.38-.22.67-.6.67-1.03 0-.22-.12-.45-.36-.6-.2-.14-.43-.21-.66-.21h-.53c-.3 0-.61.29-.66.64l-.05.02-.54 1.07h1.08c.37 0 .67.28.67.63 0 .34-.3.63-.67.63h-1.08zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2.07 12.82l.59-.06c.09 0 .18-.01.27-.04.17-.04.26-.15.26-.32 0-.2-.13-.37-.32-.43l-.59-.27c-.2-.09-.32-.29-.32-.5s.12-.41.32-.5l.59-.27c.19-.09.32-.23.32-.43 0-.17-.09-.28-.26-.32-.09-.03-.18-.04-.27-.04l-.59-.06c-.2 0-.37.07-.5.2-.13.13-.2.3-.2.5 0 .2.07.37.2.5-.13.13-.2.3-.2.5 0 .2.07.37.2.5.13.13.3.2.5.2z"/>
+                            </svg>
+                            <span>Premium Quality</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-right">
+                    <div class="location">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        <span>Your City, Country</span>
+                    </div>
+                    <div class="copyright">
+                        © 2024 Hameed Photo Studio. All rights reserved. | Designed with ❤️
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* Hameed Photo Studio Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            margin-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            opacity: 0.3;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 5% 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .footer-brand p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .social-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .social-icon.youtube { background: linear-gradient(45deg, #FF0000, #cc0000); }
+        .social-icon.whatsapp { background: linear-gradient(45deg, #25D366, #128C7E); }
+        .social-icon.facebook { background: linear-gradient(45deg, #1877F2, #0e5a8a); }
+
+        .social-icon svg { width: 24px; height: 24px; }
+
+        .footer-links h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffd700;
+            position: relative;
+        }
+
+        .footer-links h4::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: #ffd700;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .footer-links a:hover {
+            color: #ffd700;
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .contact-item svg {
+            color: #ffd700;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .location svg {
+            color: #ffd700;
+        }
+
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .footer-links {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                padding: 3rem 5% 1.5rem;
+            }
+            
+            .footer-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .contact-info {
+                justify-content: center;
+            }
+        }
+    </style>
+<!-- Floating Cart Button -->
+<div class="floating-cart" id="floatingCart">
+    <div class="cart-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
+</div>
+
+<!-- Cart Notification -->
+<div class="cart-notification" id="cartNotification">
+    <div class="notification-content">
+        <div class="notification-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+        </div>
+        <span id="notificationText">Added to cart!</span>
+    </div>
+</div>
+
+<style>
+/* Floating Cart Button Styles */
+.floating-cart {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 10000;
+    cursor: pointer;
+}
+
+.cart-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a2e;
+    box-shadow: 
+        0 10px 30px rgba(255, 215, 0, 0.4),
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.cart-icon:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 
+        0 20px 50px rgba(255, 215, 0, 0.5),
+        0 30px 80px rgba(0, 0, 0, 0.4),
+        inset 0 4px 0 rgba(255, 255, 255, 0.4);
+}
+
+.cart-icon:active {
+    transform: scale(0.95);
+}
+
+.cart-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 2;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    animation: bounce 0.6s ease infinite alternate;
+}
+
+@keyframes bounce {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.2); }
+}
+
+/* Cart Notification */
+.cart-notification {
+    position: fixed;
+    top: 100px;
+    right: -400px;
+    z-index: 10001;
+    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cart-notification.show {
+    right: 30px;
+}
+
+.notification-content {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    padding: 1.5rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 350px;
+    color: white;
+}
+
+.notification-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
+.notification-icon svg {
+    width: 24px;
+    height: 24px;
+    color: #1a1a2e;
+}
+
+#notificationText {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .floating-cart {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .cart-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .cart-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .cart-notification.show {
+        right: 20px;
+        top: 80px;
+    }
+}
+</style>
+
+<script>
+// Floating Cart Functionality
+class ShoppingCart {
+    constructor() {
+        this.items = JSON.parse(localStorage.getItem('cartItems')) || [];
+        this.updateCartCount();
+        this.initEventListeners();
+    }
+
+    initEventListeners() {
+        // Update buy buttons to work with cart
+        document.querySelectorAll('.tile-buy-btn').forEach(btn => {
+            btn.textContent = 'Add to Cart';
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = btn.closest('.product-card');
+                const index = parseInt(card.getAttribute('data-product'));
+                this.addToCart(index);
+            });
+        });
+
+        const floatingCart = document.getElementById('floatingCart');
+        if (floatingCart) {
+            floatingCart.addEventListener('click', () => {
+                window.location.href = 'cart.html';
+            });
+        }
+    }
+
+    addToCart(productIndex) {
+        const product = products[productIndex];
+        const existingItem = this.items.find(item => item.id === productIndex);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.items.push({
+                id: productIndex,
+                title: product.title,
+                price: product.price,
+                quantity: 1
+            });
+        }
+        
+        localStorage.setItem('cartItems', JSON.stringify(this.items));
+        this.updateCartCount();
+        this.showNotification();
+    }
+
+    updateCartCount() {
+        const count = this.items.reduce((total, item) => total + item.quantity, 0);
+        const cartCount = document.getElementById('cartCount');
+        const overlayCount = document.getElementById('overlayCartCount');
+        if (cartCount) {
+            cartCount.textContent = count;
+            cartCount.style.display = count > 0 ? 'flex' : 'none';
+        }
+        if (overlayCount) {
+            overlayCount.textContent = count;
+            overlayCount.style.display = count > 0 ? 'inline-flex' : 'none';
+        }
+    }
+
+    showNotification() {
+        const notification = document.getElementById('cartNotification');
+        const text = document.getElementById('notificationText');
+        text.textContent = 'Added to cart! 🛒';
+        
+        notification.classList.add('show');
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    showCart() {
+        if (this.items.length === 0) {
+            alert('Your cart is empty! 👀\nStart shopping now!');
+            return;
+        }
+        
+        let cartHTML = '🛒 **YOUR CART**\n\n';
+        this.items.forEach(item => {
+            cartHTML += `• ${item.title}\n  ${item.quantity}x ${item.price} = $${parseInt(item.price.slice(1)) * item.quantity}\n\n`;
+        });
+        cartHTML += `**Total: $${this.getTotal()}**\n\nReady to checkout? 💳`;
+        
+        alert(cartHTML);
+    }
+
+    getTotal() {
+        return this.items.reduce((total, item) => {
+            return total + (parseInt(item.price.slice(1)) * item.quantity);
+        }, 0);
+    }
+}
+
+// Initialize cart when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    window.shoppingCart = new ShoppingCart();
+
+    const saleLabels = ['30% OFF', '50% OFF', 'Price Cut'];
+    document.querySelectorAll('.product-card').forEach((card, index) => {
+        const badge = document.createElement('div');
+        badge.className = 'sale-badge';
+        badge.textContent = saleLabels[Math.floor(Math.random() * saleLabels.length)];
+        card.prepend(badge);
+
+        // Add original price display
+        const product = products[index];
+        const priceDiv = card.querySelector('.product-price');
+        if (product && product.originalPrice) {
+            priceDiv.innerHTML = `${product.price} <span class="original-price">was ${product.originalPrice}</span>`;
+        }
+    });
+});
+
+function handleMenuLink(target, event) {
+    event.preventDefault();
+    const popup = document.getElementById('menuContactPopup');
+    if (popup) popup.classList.remove('visible');
+
+    const isHomepage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/index.html');
+    if (isHomepage) {
+        toggleMenu(false);
+        if (target === 'home') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+
+        const section = document.getElementById(target);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        return;
+    }
+
+    const destination = target === 'home' ? 'index.html' : `index.html#${target}`;
+    window.location.href = destination;
+}
+
+function handleContactMenu(event) {
+    event.preventDefault();
+    const popup = document.getElementById('menuContactPopup');
+    if (!popup) return false;
+    popup.classList.toggle('visible');
+    return false;
+}
+
+function toggleMenu(open = true) {
+    const overlay = document.getElementById('menuOverlay');
+    overlay.classList.toggle('active', open);
+    const popup = document.getElementById('menuContactPopup');
+    if (!open && popup) popup.classList.remove('visible');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #F7F5F2;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #EDE7DF 0%, #D8D2C8 100%);
+            color: #333;
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(45deg, #8B7355, #A0826D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .cart-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,107,107,0.3);
+        }
+
+        .cart-count {
+            background: white;
+            color: #ff6b6b;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 10010;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-content {
+            width: min(320px, 90vw);
+            background: #EDE7DF;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.35);
+        }
+
+        .contact-popup {
+            display: none;
+            background: #EDE7DF;
+            color: #333;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .contact-popup.visible {
+            display: block;
+        }
+
+        .contact-popup p {
+            margin: 0.5rem 0;
+        }
+
+        .menu-close {
+            background: transparent;
+            border: none;
+            color: #333;
+            font-size: 2.5rem;
+            line-height: 1;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .menu-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .menu-nav a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 0.9rem 1rem;
+            border-radius: 16px;
+            transition: background 0.2s ease;
+        }
+
+        .menu-nav a:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #EDE7DF 0%, #D8D2C8 100%);
+            padding: 20px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+        .page-header .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            background: linear-gradient(45deg, #facc15, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .page-header a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid rgba(0,0,0,0.18);
+            padding: 0.75rem 1.4rem;
+            border-radius: 999px;
+            transition: background 0.25s ease, transform 0.25s ease;
+        }
+        .page-header a:hover {
+            background: rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+        .product-page {
+            max-width: 1200px;
+            margin: 120px auto;
+            padding: 0 5%;
+        }
+        .product-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .image-stack {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+        .image-card {
+            border-radius: 28px;
+            overflow: hidden;
+            background: #EDE7DF;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+            max-width: 500px;
+            width: 100%;
+        }
+        .image-card img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+            min-height: 400px;
+        }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: background 0.3s ease;
+        }
+        .nav-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        .nav-btn.prev {
+            left: 10px;
+        }
+        .nav-btn.next {
+            right: 10px;
+        }
+        .detail-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .detail-copy h1 {
+            margin: 0;
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            line-height: 1.05;
+            color: #333;
+        }
+        .detail-copy .detail-price {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #8B7355;
+        }
+        .detail-copy .detail-desc {
+            font-size: 1.05rem;
+            line-height: 1.85;
+            color: #666;
+        }
+        .add-cart-btn {
+            background: linear-gradient(135deg, #D8D2C8, #EDE7DF);
+            border: 1px solid #8B7355;
+            color: #333;
+            padding: 1.25rem 2.5rem;
+            border-radius: 999px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+            width: fit-content;
+            margin: 0 auto;
+            display: block;
+        }
+        .add-cart-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #EDE7DF, #F7F5F2);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.16);
+        }
+        .back-home {
+            background: transparent;
+            color: #333;
+            border: 1px solid #D8D2C8;
+            padding: 1rem 1.8rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: background 0.2s ease;
+            margin: 0 auto;
+        }
+        .back-home:hover {
+            background: rgba(0,0,0,0.08);
+        }
+        .product-notice {
+            text-align: center;
+            margin-top: 80px;
+            color: #333;
+            font-size: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .product-detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">Hameed Photo Studio</div>
+            <div style="display: flex; align-items: center;">
+                <button class="cart-btn" onclick="window.location.href='cart.html'">
+                    <span>🛒</span> Cart
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <div class="hamburger" onclick="toggleMenu()">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <button class="menu-close" onclick="toggleMenu(false)">×</button>
+            <nav class="menu-nav">
+                <a href="#" onclick="handleMenuLink('home', event)">Home</a>
+                <a href="#" onclick="handleMenuLink('products', event)">Products</a>
+                <a href="cart.html" class="menu-cart-link" onclick="toggleMenu(false)">Cart <span class="menu-cart-count" id="overlayCartCount">0</span></a>
+                <a href="#" onclick="handleContactMenu(event)">Contact</a>
+                <a href="#" onclick="handleMenuLink('about', event)">About</a>
+            </nav>
+            <div class="contact-popup" id="menuContactPopup">
+                <p><strong>Contact</strong></p>
+                <p>mmmm@gmail.com</p>
+                <p>03338181082</p>
+            </div>
+        </div>
+    </div>
+
+    <main class="product-page">
+        <div id="productContent">
+            <div class="product-notice">Loading product…</div>
+        </div>
+    </main>
+
+    <script>
+        const products = [
+            { images:['images/mirrorframes1.jpg','images/mirrorframes2.jpg'], title:'Mirror Frames', price:'Rs 2000', originalPrice:'Rs 2500', desc:'Premium mirror frames with polished edges and luxury finish.' },
+            { images:['images/magicmirror1.jpg','images/magicmirror2.jpg'], title:'LED Frame', price:'Rs 2000', originalPrice:'Rs 2400', desc:'Modern LED photo frame with soft ambient lighting.' },
+            { images:['images/ledframe1.jpg','images/ledframe2.jpg'], title:'Couple Frame', price:'Rs 2499', originalPrice:'Rs 2999', desc:'Elegant couple frame with premium glass and gold trim.' },
+            { images:['images/magicmirrornew1.jpg','images/magicmirrorframenew2.jpg'], title:'Magic Mirror Frame', price:'Rs 2000', originalPrice:'Rs 2500', desc:'Luxury magic mirror frame with glowing edge lighting.' },
+            { images:['images/whitemug1.jpg','images/whitemug2.jpg'], title:'White Mug', price:'Rs 799', originalPrice:'Rs 999', desc:'Classic white mug with full-color photo print.' },
+            { images:['images/colourmug1.jpg','images/colourmug2.jpg'], title:'Colour Mug', price:'Rs 1099', originalPrice:'Rs 1299', desc:'Colour-changing mug with premium photo design.' },
+            { images:['images/whiteshirt1.jpg','images/whiteshirt2.jpg'], title:'White Shirt', price:'Rs 799', originalPrice:'Rs 999', desc:'Customized white shirt with crisp print quality.' },
+            { images:['images/colourshirt1.jpg','images/colourshirt2.jpg'], title:'Colour Shirt', price:'Rs 1499', originalPrice:'Rs 1799', desc:'Premium colour shirt with unique photo artwork.' },
+            { images:['images/cushion1.jpg','images/cushion2.jpg'], title:'Cushion', price:'Rs 749', originalPrice:'Rs 899', desc:'Soft cushion with high-definition printed fabric.' },
+            { images:['images/chain1.jpg','images/chain2.jpg'], title:'Chain', price:'Rs 499', originalPrice:'Rs 599', desc:'Stylish chain with polished metal finish.' },
+            { images:['images/ring1.jpg','images/ring2.jpg'], title:'Ring', price:'Rs 245', originalPrice:'Rs 299', desc:'Elegant ring with personalized engraving option.' },
+            { images:['images/keyring1.jpg','images/keyring2.jpg'], title:'Keyring', price:'Rs 499', originalPrice:'Rs 599', desc:'Durable keyring with premium photo insert.' },
+            { images:['images/album1.jpg','images/album2.jpg'], title:'Album', price:'Rs 999', originalPrice:'Rs 1299', desc:'Luxury photo album with fine-quality pages.' },
+            { images:['images/lunchbox1.jpg','images/lunchbox2.jpg'], title:'Lunch Box', price:'Rs 699', originalPrice:'Rs 849', desc:'Premium lunch box with easy-clean interior.' },
+            { images:['images/waterbottle1.jpg','images/waterbottle2.jpg'], title:'Water Bottle', price:'Rs 899', originalPrice:'Rs 1099', desc:'Premium water bottle with custom print design.' },
+            { images:['images/badge1.jpg','images/badge2.jpg'], title:'Badges', price:'Rs 199', originalPrice:'Rs 249', desc:'Set of custom badges with vibrant prints.' },
+            { images:['images/pen1.jpg','images/pen2.jpg'], title:'Pens', price:'Rs 99', originalPrice:'Rs 149', desc:'Premium writing pens with personalized branding.' },
+            { images:['images/flyer1.jpg','images/flyer2.jpg'], title:'Flyers', price:'Rs 699', originalPrice:'Rs 899', desc:'High-quality flyers printed on glossy stock.' },
+            { images:['images/framedcanvas1.jpg','images/framedcanvas2.jpg'], title:'Framed Canvas', price:'Rs 3499', originalPrice:'Rs 3999', desc:'Large framed canvas with vibrant photo detail.' },
+            { images:['images/birthdaycard1.jpg','images/birthdaycard2.jpg'], title:'Birthday Card', price:'Rs 499', originalPrice:'Rs 599', desc:'Premium birthday card with custom photo print.' },
+            { images:['images/heartmug1.jpg','images/heartmug2.jpg'], title:'Heart Mug', price:'Rs 999', originalPrice:'Rs 1199', desc:'Romantic heart mug with vivid photo details.' },
+            { images:['images/magicmug1.jpg','images/magicmug2.jpg'], title:'Magic Mug', price:'Rs 1099', originalPrice:'Rs 1299', desc:'Magic mug with hidden design revealed by heat.' },
+            { images:['images/phonecover1.jpg','images/phonecover2.jpg'], title:'Phone Cover', price:'Rs 899', originalPrice:'Rs 1099', desc:'Protective phone cover with custom photo print.' },
+            { images:['images/printedalbum1.jpg','images/printedalbum2.jpg'], title:'Printed Album', price:'Rs 1299', originalPrice:'Rs 1499', desc:'High-end printed album with premium binding.' },
+            { images:['images/smallframe1.jpg','images/smallframe2.jpg'], title:'Small Frame', price:'Rs 599', originalPrice:'Rs 749', desc:'Compact frame with polished acrylic cover.' },
+            { images:['images/wallet1.jpg','images/wallet2.jpg'], title:'Wallet', price:'Rs 799', originalPrice:'Rs 999', desc:'Stylish wallet with premium leather look.' },
+            { images:['images/visitingcard1.jpg','images/visitingcard2.jpg'], title:'Visiting Card', price:'Rs 399', originalPrice:'Rs 499', desc:'Custom visiting cards printed on matte stock.' },
+            { images:['images/tempbottle1.jpg','images/tempbottle2.jpg'], title:'Temp Bottle', price:'Rs 999', originalPrice:'Rs 1199', desc:'Temperature-control bottle with premium finish.' },
+            { images:['images/magiccushion1.jpg','images/cushion2.jpg'], title:'Magic Cushion', price:'Rs 1299', originalPrice:'Rs 1499', desc:'Unique magic cushion with color-changing print.' },
+            { images:['images/canvas1.jpg','images/canvas2.jpg'], title:'Photo Canvas', price:'Rs 2999', originalPrice:'Rs 3499', desc:'Gallery-style canvas with deep color saturation.' }
+        ];
+
+        function getSelectedProductIndex() {
+            const stored = localStorage.getItem('selectedProduct');
+            const index = parseInt(stored, 10);
+            return Number.isInteger(index) && index >= 0 && index < products.length ? index : null;
+        }
+
+        function addToCart(productIndex) {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const product = products[productIndex];
+            const existing = cart.find(item => item.id === productIndex);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id: productIndex, title: product.title, price: product.price, quantity: 1 });
+            }
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+            alert(`${product.title} added to cart!`);
+        }
+
+        let currentImageIndex = 0;
+
+        function changeImage(direction, productIndex) {
+            const product = products[productIndex];
+            currentImageIndex += direction;
+            if (currentImageIndex < 0) currentImageIndex = product.images.length - 1;
+            if (currentImageIndex >= product.images.length) currentImageIndex = 0;
+            document.getElementById('productImage').src = product.images[currentImageIndex];
+        }
+
+        function renderProduct(productIndex) {
+            const product = products[productIndex];
+            const productContent = document.getElementById('productContent');
+            productContent.innerHTML = `
+                <div class="product-detail-grid">
+                    <div class="image-stack">
+                        <div class="image-card">
+                            <img id="productImage" src="${product.images[0]}" alt="${product.title}">
+                        </div>
+                        <button class="nav-btn prev" onclick="changeImage(-1, ${productIndex})">&#10094;</button>
+                        <button class="nav-btn next" onclick="changeImage(1, ${productIndex})">&#10095;</button>
+                    </div>
+                    <div class="detail-copy">
+                        <div>
+                            <h1>${product.title}</h1>
+                            <div class="detail-price">${product.price} <span style="text-decoration: line-through; color: #000; font-size: 1rem; margin-left: 1rem;">${product.originalPrice}</span></div>
+                        </div>
+                        <p class="detail-desc">${product.desc}</p>
+                       
+                        <button class="add-cart-btn" id="detailAddToCart">Add to Cart</button>
+                        <a href="index.html" class="back-home">← Back to Collection</a>
+                    </div>
+                </div>
+            `;
+            document.getElementById('detailAddToCart').addEventListener('click', () => {
+                addToCart(productIndex);
+            });
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartCount').style.display = count > 0 ? 'flex' : 'none';
+        }
+
+        const selectedIndex = getSelectedProductIndex();
+        if (selectedIndex === null) {
+            document.getElementById('productContent').innerHTML = '<div class="product-notice">Product not found. Please return to the homepage and select a product.</div>';
+        } else {
+            renderProduct(selectedIndex);
+        }
+        updateCartCount();
+
+        function handleMenuLink(target, event) {
+            event.preventDefault();
+            const popup = document.getElementById('menuContactPopup');
+            if (popup) popup.classList.remove('visible');
+
+            const isHomepage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/index.html');
+            if (isHomepage) {
+                toggleMenu(false);
+                if (target === 'home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+
+                const section = document.getElementById(target);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                return;
+            }
+
+            const destination = target === 'home' ? 'index.html' : `index.html#${target}`;
+            window.location.href = destination;
+        }
+
+        function handleContactMenu(event) {
+            event.preventDefault();
+            const popup = document.getElementById('menuContactPopup');
+            if (!popup) return false;
+            popup.classList.toggle('visible');
+            return false;
+        }
+
+        function toggleMenu(open = true) {
+            const overlay = document.getElementById('menuOverlay');
+            overlay.classList.toggle('active', open);
+            const popup = document.getElementById('menuContactPopup');
+            if (!open && popup) popup.classList.remove('visible');
+        }
+    </script>
+</body>
+</html>
