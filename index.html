@@ -571,8 +571,14 @@
             }
 
             .hero {
-                background: url('bg2.jpg') center center / contain no-repeat;
-                background-color: #F7F5F2;
+                aspect-ratio: 16 / 9;
+                min-height: 240px;
+                padding: 0 2%;
+                margin-top: 70px;
+            }
+
+            .hero-slider {
+                overflow: hidden;
             }
 
             .detail-container {
@@ -583,6 +589,7 @@
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
+                padding: 0 2%;
             }
 
             .product-card {
@@ -613,6 +620,33 @@
             .tile-buy-btn {
                 margin-top: 0.4rem;
                 padding: 0.75rem 1.2rem;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .hero {
+                aspect-ratio: 16 / 9;
+                min-height: 200px;
+                padding: 0 1%;
+                margin-top: 60px;
+            }
+
+            .products-section {
+                padding: 40px 1% 60px;
+            }
+
+            .products-grid {
+                padding: 0 1%;
+                gap: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                padding: 0 3%;
             }
         }
 
