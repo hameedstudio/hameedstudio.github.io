@@ -1299,18 +1299,7 @@
                 openProductPage(productIndex);
             });
 
-            const tileBuyBtn = card.querySelector('.tile-buy-btn');
-            if (tileBuyBtn) {
-                tileBuyBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const productIndex = parseInt(card.getAttribute('data-product'));
-                    if (window.shoppingCart) {
-                        window.shoppingCart.addToCart(productIndex);
-                    } else {
-                        alert('Cart is initializing, please try again in a moment.');
-                    }
-                });
-            }
+          
         });
 
         // Navigation Arrows
