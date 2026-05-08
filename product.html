@@ -377,7 +377,7 @@
     </main>
 
     <script>
-        const products = [
+        window.products = [
             { images:['images/mirrorframes1.jpg','images/mirrorframes2.jpg'], title:'Mirror Frames', price:'Rs 2000', originalPrice:'Rs 2500', desc:'Premium mirror frames with polished edges and luxury finish.' },
             { images:['images/magicmirror1.jpg','images/magicmirror2.jpg'], title:'LED Frame', price:'Rs 2000', originalPrice:'Rs 2400', desc:'Modern LED photo frame with soft ambient lighting.' },
             { images:['images/ledframe1.jpg','images/ledframe2.jpg'], title:'Couple Frame', price:'Rs 2499', originalPrice:'Rs 2999', desc:'Elegant couple frame with premium glass and gold trim.' },
@@ -430,7 +430,7 @@
 
         function addToCart(productIndex) {
             const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-            const product = products[productIndex];
+            const product = window.products[productIndex];
             const existing = cart.find(item => item.id === productIndex);
             if (existing) {
                 existing.quantity += 1;
@@ -445,7 +445,7 @@
         let currentImageIndex = 0;
 
         function changeImage(direction, productIndex) {
-            const product = products[productIndex];
+            const product = window.products[productIndex];
             currentImageIndex += direction;
             if (currentImageIndex < 0) currentImageIndex = product.images.length - 1;
             if (currentImageIndex >= product.images.length) currentImageIndex = 0;
@@ -454,7 +454,7 @@
 
         function renderProduct(productIndex) {
             currentImageIndex = 0;
-            const product = products[productIndex];
+            const product = window.products[productIndex];
             const productContent = document.getElementById('productContent');
             productContent.innerHTML = `
                 <div class="product-detail-grid">
