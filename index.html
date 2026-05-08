@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hameed Photo Studio </title>
+    <title>Hameed Photo Studio Collection</title>
     <style>
         * {
             margin: 0;
@@ -722,12 +722,14 @@
             </nav>
             <div class="contact-popup" id="menuContactPopup">
                 <p><strong>Contact</strong></p>
-                
+                <p>mmmm@gmail.com</p>
                 <p>03338181082</p>
             </div>
         </div>
     </div>
-<h2 class="section-title">Trending Offers</h2>
+
+    <h2 class="section-title">Trending Offers</h2>
+
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-slider" id="heroSlider"></div>
@@ -736,7 +738,7 @@
         </div>
     </section>
 
-    <!-- Mother's Day Deals Section -->
+     <!-- Mother's Day Deals Section -->
     <section class="mothers-day-section">
         <h2 class="section-title">Mother's Day Special</h2>
         <div class="products-grid" id="mothersGrid">
@@ -1023,6 +1025,7 @@
         </div>
     </section>
 
+
     <!-- Product Detail Modal -->
     <section class="product-detail" id="productDetail">
         <div class="detail-container">
@@ -1043,14 +1046,14 @@
 
     <script>
         // Product Data Array - UPDATE THIS WITH YOUR PRODUCTS
-        const products = [
-            {
+        window.products = [
+             {
                 images: ['images/mirrorframes1.jpg', 'images/mirrorframes2.jpg'],
                 title: 'Mirror Frames',
                 price: 'Rs 1599',
                 originalPrice: 'Rs 2299',
                 desc: 'Premium mirror frames with polished edges and luxury finish.'
-        
+            },
             {
                 images: ['images/magicmirror1.jpg', 'images/magicmirror2.jpg'],
                 title: 'LED Frame',
@@ -1286,21 +1289,6 @@
 
         let currentProductIndex = 0;
         let currentImageIndex = 0;
-
-        function openProductPage(index) {
-            localStorage.setItem('selectedProduct', index);
-            window.location.href = `product.html?product=${index}`;
-        }
-
-        // Product Card Click Handler
-        document.querySelectorAll('.product-card').forEach((card) => {
-            card.addEventListener('click', () => {
-                const productIndex = parseInt(card.getAttribute('data-product'));
-                openProductPage(productIndex);
-            });
-
-          
-        });
 
         // Navigation Arrows
         document.getElementById('prevBtn').addEventListener('click', () => {
@@ -1867,7 +1855,7 @@ class ShoppingCart {
     }
 
     addToCart(productIndex) {
-        const product = products[productIndex];
+        const product = window.products[productIndex];
         const existingItem = this.items.find(item => item.id === productIndex);
         
         if (existingItem) {
@@ -1988,7 +1976,16 @@ setInterval(rotateHeroImage, 3000);
 document.addEventListener('DOMContentLoaded', () => {
     window.shoppingCart = new ShoppingCart();
 
-    const saleLabels = ['30% OFF'];
+    // Product Card Click Handler
+    document.querySelectorAll('.product-card').forEach((card) => {
+        card.addEventListener('click', () => {
+            const productIndex = parseInt(card.getAttribute('data-product'));
+            localStorage.setItem('selectedProduct', productIndex);
+            window.location.href = `product.html?product=${productIndex}`;
+        });
+    });
+
+    const saleLabels = ['30% OFF', '50% OFF', 'Price Cut'];
     document.querySelectorAll('.product-card').forEach((card, index) => {
         const badge = document.createElement('div');
         badge.className = 'sale-badge';
