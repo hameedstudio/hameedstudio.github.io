@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Detail</title>
+    <title>Shopping Cart - Hameed Photo Studio</title>
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: #F7F5F2;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
             color: #333;
+            background: #F7F5F2;
+            overflow-x: hidden;
         }
 
         /* Header */
@@ -35,6 +42,597 @@
 
         .logo {
             font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(45deg, #8B7355, #A0826D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .cart-btn {
+            background: linear-gradient(135deg, #D8D2C8, #EDE7DF);
+            color: #333;
+            border: 1px solid #8B7355;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.14);
+            background: linear-gradient(135deg, #EDE7DF, #F7F5F2);
+        }
+
+        .cart-count {
+            background: white;
+            color: #ff6b6b;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 10010;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-content {
+            width: min(320px, 90vw);
+            background: #EDE7DF;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.35);
+        }
+
+        .contact-popup {
+            display: none;
+            background: #EDE7DF;
+            color: #333;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .contact-popup.visible {
+            display: block;
+        }
+
+        .contact-popup p {
+            margin: 0.5rem 0;
+        }
+
+        .menu-close {
+            background: transparent;
+            border: none;
+            color: #333;
+            font-size: 2.5rem;
+            line-height: 1;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .menu-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .menu-nav a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 0.9rem 1rem;
+            border-radius: 16px;
+            transition: background 0.2s ease;
+        }
+
+        .menu-nav a:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        /* Cart Container */
+        .cart-container {
+            max-width: 1200px;
+            margin: 120px auto 50px;
+            padding: 0 5%;
+        }
+
+        .cart-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #EDE7DF;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .cart-empty h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .cart-empty p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .shop-btn {
+            background: linear-gradient(135deg, #D8D2C8, #EDE7DF);
+            color: #333;
+            border: 1px solid #8B7355;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .shop-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.16);
+            background: linear-gradient(135deg, #EDE7DF, #F7F5F2);
+        }
+
+        /* Cart Items */
+        .cart-items {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            background: #EDE7DF;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1a1a2e;
+        }
+
+        .item-price {
+            font-size: 1.1rem;
+            color: #8B7355;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .qty-btn {
+            background: #D8D2C8;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s ease;
+        }
+
+        .qty-btn:hover {
+            background: #C4BDB0;
+        }
+
+        .quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            background: #EDE7DF;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .total-row {
+            border-top: 2px solid #D8D2C8;
+            padding-top: 1rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(16,185,129,0.4);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cart-title {
+                font-size: 2rem;
+            }
+
+            .item-image {
+                width: 100%;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">Hameed Photo Studio</div>
+            <div style="display: flex; align-items: center;">
+                <button class="cart-btn" onclick="window.location.href='cart.html'">
+                    <span>🛒</span> Cart
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <div class="hamburger" onclick="toggleMenu()">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <button class="menu-close" onclick="toggleMenu(false)">×</button>
+            <nav class="menu-nav">
+                <a href="#" onclick="handleMenuLink('home', event)">Home</a>
+                <a href="#" onclick="handleMenuLink('products', event)">Products</a>
+                <a href="cart.html" class="menu-cart-link" onclick="toggleMenu(false)">Cart <span class="menu-cart-count" id="overlayCartCount">0</span></a>
+                <a href="#" onclick="handleContactMenu(event)">Contact</a>
+                <a href="#" onclick="handleMenuLink('about', event)">About</a>
+            </nav>
+            <div class="contact-popup" id="menuContactPopup">
+                <p><strong>Contact</strong></p>
+                <p>mmmm@gmail.com</p>
+                <p>03338181082</p>
+            </div>
+        </div>
+    </div>
+
+    <main class="cart-container">
+        <h1 class="cart-title">Your Shopping Cart</h1>
+        <div id="cartContent">
+            <div class="cart-empty">
+                <h2>Your cart is empty</h2>
+                <p>Add some amazing products to your cart!</p>
+                <a href="index.html" class="shop-btn">Start Shopping</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        window.products = [
+            { images:['images/mirrorframes1.jpg','images/mirrorframes2.jpg'], title:'Mirror Frames', price:'Rs 2000', originalPrice:'Rs 2500', desc:'Premium mirror frames with polished edges and luxury finish.' },
+            { images:['images/magicmirror1.jpg','images/magicmirror2.jpg'], title:'LED Frame', price:'Rs 2000', originalPrice:'Rs 2400', desc:'Modern LED photo frame with soft ambient lighting.' },
+            { images:['images/ledframe1.jpg','images/ledframe2.jpg'], title:'Couple Frame', price:'Rs 2499', originalPrice:'Rs 2999', desc:'Elegant couple frame with premium glass and gold trim.' },
+            { images:['images/magicmirrornew1.jpg','images/magicmirrorframenew2.jpg'], title:'Magic Mirror Frame', price:'Rs 2000', originalPrice:'Rs 2500', desc:'Luxury magic mirror frame with glowing edge lighting.' },
+            { images:['images/whitemug1.jpg','images/whitemug2.jpg'], title:'White Mug', price:'Rs 799', originalPrice:'Rs 999', desc:'Classic white mug with full-color photo print.' },
+            { images:['images/colourmug1.jpg','images/colourmug2.jpg'], title:'Colour Mug', price:'Rs 1099', originalPrice:'Rs 1299', desc:'Colour-changing mug with premium photo design.' },
+            { images:['images/whiteshirt1.jpg','images/whiteshirt2.jpg'], title:'White Shirt', price:'Rs 799', originalPrice:'Rs 999', desc:'Customized white shirt with crisp print quality.' },
+            { images:['images/colourshirt1.jpg','images/colourshirt2.jpg'], title:'Colour Shirt', price:'Rs 1499', originalPrice:'Rs 1799', desc:'Premium colour shirt with unique photo artwork.' },
+            { images:['images/cushion1.jpg','images/cushion2.jpg'], title:'Cushion', price:'Rs 749', originalPrice:'Rs 899', desc:'Soft cushion with high-definition printed fabric.' },
+            { images:['images/chain1.jpg','images/chain2.jpg'], title:'Chain', price:'Rs 499', originalPrice:'Rs 599', desc:'Stylish chain with polished metal finish.' },
+            { images:['images/ring1.jpg','images/ring2.jpg'], title:'Ring', price:'Rs 245', originalPrice:'Rs 299', desc:'Elegant ring with personalized engraving option.' },
+            { images:['images/keyring1.jpg','images/keyring2.jpg'], title:'Keyring', price:'Rs 499', originalPrice:'Rs 599', desc:'Durable keyring with premium photo insert.' },
+            { images:['images/album1.jpg','images/album2.jpg'], title:'Album', price:'Rs 999', originalPrice:'Rs 1299', desc:'Luxury photo album with fine-quality pages.' },
+            { images:['images/lunchbox1.jpg','images/lunchbox2.jpg'], title:'Lunch Box', price:'Rs 699', originalPrice:'Rs 849', desc:'Premium lunch box with easy-clean interior.' },
+            { images:['images/waterbottle1.jpg','images/waterbottle2.jpg'], title:'Water Bottle', price:'Rs 899', originalPrice:'Rs 1099', desc:'Premium water bottle with custom print design.' },
+            { images:['images/badge1.jpg','images/badge2.jpg'], title:'Badges', price:'Rs 199', originalPrice:'Rs 249', desc:'Set of custom badges with vibrant prints.' },
+            { images:['images/pen1.jpg','images/pen2.jpg'], title:'Pens', price:'Rs 99', originalPrice:'Rs 149', desc:'Premium writing pens with personalized branding.' },
+            { images:['images/flyer1.jpg','images/flyer2.jpg'], title:'Flyers', price:'Rs 699', originalPrice:'Rs 899', desc:'High-quality flyers printed on glossy stock.' },
+            { images:['images/framedcanvas1.jpg','images/framedcanvas2.jpg'], title:'Framed Canvas', price:'Rs 3499', originalPrice:'Rs 3999', desc:'Large framed canvas with vibrant photo detail.' },
+            { images:['images/birthdaycard1.jpg','images/birthdaycard2.jpg'], title:'Birthday Card', price:'Rs 499', originalPrice:'Rs 599', desc:'Premium birthday card with custom photo print.' },
+            { images:['images/heartmug1.jpg','images/heartmug2.jpg'], title:'Heart Mug', price:'Rs 999', originalPrice:'Rs 1199', desc:'Romantic heart mug with vivid photo details.' },
+            { images:['images/magicmug1.jpg','images/magicmug2.jpg'], title:'Magic Mug', price:'Rs 1099', originalPrice:'Rs 1299', desc:'Magic mug with hidden design revealed by heat.' },
+            { images:['images/phonecover1.jpg','images/phonecover2.jpg'], title:'Phone Cover', price:'Rs 899', originalPrice:'Rs 1099', desc:'Protective phone cover with custom photo print.' },
+            { images:['images/printedalbum1.jpg','images/printedalbum2.jpg'], title:'Printed Album', price:'Rs 1299', originalPrice:'Rs 1499', desc:'High-end printed album with premium binding.' },
+            { images:['images/smallframe1.jpg','images/smallframe2.jpg'], title:'Small Frame', price:'Rs 599', originalPrice:'Rs 749', desc:'Compact frame with polished acrylic cover.' },
+            { images:['images/wallet1.jpg','images/wallet2.jpg'], title:'Wallet', price:'Rs 799', originalPrice:'Rs 999', desc:'Stylish wallet with premium leather look.' },
+            { images:['images/visitingcard1.jpg','images/visitingcard2.jpg'], title:'Visiting Card', price:'Rs 399', originalPrice:'Rs 499', desc:'Custom visiting cards printed on matte stock.' },
+            { images:['images/tempbottle1.jpg','images/tempbottle2.jpg'], title:'Temp Bottle', price:'Rs 999', originalPrice:'Rs 1199', desc:'Temperature-control bottle with premium finish.' },
+            { images:['images/magiccushion1.jpg','images/cushion2.jpg'], title:'Magic Cushion', price:'Rs 1299', originalPrice:'Rs 1499', desc:'Unique magic cushion with color-changing print.' },
+            { images:['images/canvas1.jpg','images/canvas2.jpg'], title:'Photo Canvas', price:'Rs 2999', originalPrice:'Rs 3499', desc:'Gallery-style canvas with deep color saturation.' },
+            { images:['images/md11.jpg','images/md22.jpg'], title:'Mothers Day Special Deal', price:'Rs 1999', originalPrice:'Rs 2999', desc:"Exclusive Mother's Day combo: Premium Mug + Beautiful Frame + Soft Cushion with special discount." },
+            { images:['images/mdm1.jpg','images/mdm2.jpg'], title:'Mothers Day Mug', price:'Rs 699', originalPrice:'Rs 999', desc:"Beautiful Mother's Day special mug with premium photo print - perfect gift for mom." },
+            { images:['images/mdc1.jpg','images/mdc.jpg'], title:'Mothers Day Cushion', price:'Rs 999', originalPrice:'Rs 1499', desc:"Soft and comfortable Mother's Day cushion with custom photo design." },
+            { images:['images/mdf1.jpg','images/mdf.jpg'], title:'Mothers Day Frames', price:'Rs 999', originalPrice:'Rs 1999', desc:"Elegant Mother's Day frame with premium finish - ideal for precious memories." }
+        ];
+
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const cartContent = document.getElementById('cartContent');
+
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="cart-empty">
+                        <h2>Your cart is empty</h2>
+                        <p>Add some amazing products to your cart!</p>
+                        <a href="index.html" class="shop-btn">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            let itemsHTML = '<div class="cart-items">';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const product = window.products[item.id];
+                const itemTotal = parseInt(item.price.replace('Rs ', '')) * item.quantity;
+                total += itemTotal;
+
+                itemsHTML += `
+                    <div class="cart-item">
+                        <div class="item-image" style="background-image: url('${product.images[0]}')"></div>
+                        <div class="item-details">
+                            <h3 class="item-title">${item.title}</h3>
+                            <div class="item-price">${item.price}</div>
+                            <div class="quantity-controls">
+                                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span class="quantity">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            itemsHTML += '</div>';
+
+            itemsHTML += `
+                <div class="cart-summary">
+                    <div class="summary-row total-row">
+                        <span>Total: Rs ${total}</span>
+                    </div>
+                    <button class="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
+                </div>
+            `;
+
+            cartContent.innerHTML = itemsHTML;
+        }
+
+        function updateQuantity(index, change) {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function removeItem(index) {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function checkout() {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            if (cart.length === 0) return;
+
+            let message = 'Hello! I would like to order the following items:\n\n';
+            let total = 0;
+
+            cart.forEach(item => {
+                const product = window.products[item.id];
+                const itemTotal = parseInt(item.price.replace('Rs ', '')) * item.quantity;
+                total += itemTotal;
+                message += `• ${item.title} - ${item.quantity}x ${item.price} = Rs ${itemTotal}\n`;
+            });
+
+            message += `\nTotal: Rs ${total}\n\nPlease confirm my order.`;
+
+            const whatsappUrl = `https://wa.me/923338181082?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartCount = document.getElementById('cartCount');
+            const overlayCount = document.getElementById('overlayCartCount');
+            if (cartCount) {
+                cartCount.textContent = count;
+                cartCount.style.display = count > 0 ? 'flex' : 'none';
+            }
+            if (overlayCount) {
+                overlayCount.textContent = count;
+                overlayCount.style.display = count > 0 ? 'inline-flex' : 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+            updateCartCount();
+        });
+
+        function handleMenuLink(target, event) {
+            event.preventDefault();
+            const popup = document.getElementById('menuContactPopup');
+            if (popup) popup.classList.remove('visible');
+
+            const isHomepage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/index.html');
+            if (isHomepage) {
+                toggleMenu(false);
+                if (target === 'home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+
+                const section = document.getElementById(target);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                return;
+            }
+
+            const destination = target === 'home' ? 'index.html' : `index.html#${target}`;
+            window.location.href = destination;
+        }
+
+        function handleContactMenu(event) {
+            event.preventDefault();
+            const popup = document.getElementById('menuContactPopup');
+            if (!popup) return false;
+            popup.classList.toggle('visible');
+            return false;
+        }
+
+        function toggleMenu(open = true) {
+            const overlay = document.getElementById('menuOverlay');
+            overlay.classList.toggle('active', open);
+            const popup = document.getElementById('menuContactPopup');
+            if (!open && popup) popup.classList.remove('visible');
+        }
+    </script>
+</body>
+</html>            font-size: 2rem;
             font-weight: 800;
             letter-spacing: -1px;
             background: linear-gradient(45deg, #8B7355, #A0826D);
